@@ -67,16 +67,17 @@ public class DoublelinkedList<E> {
         first.next.prev = first;
     }
 
-    //последний
-    public E back() {
+    //get last. @last is just the link to real last, so return previous to @last
+    public E getLast() {
         return last.prev.item;
     }
 
-    //первый
+    //get first. @first is just the link to real last, so return next to @first
     public E front() {
         return first.next.item;
     }
 
+    //if @first and last link to each other, then no real elements between them in the list
     public boolean isEmpty() {
         return (first.next == last && last.prev == first);
     }
