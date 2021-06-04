@@ -1,5 +1,8 @@
-//Doublelinked list implementation
 public class DoublelinkedList<E> {
+    /**
+     * Doublelinked list implementation
+     * @param <E>  - element type
+     */
 
     // Nested inner class
     static class Node<E> {

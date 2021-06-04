@@ -4,12 +4,8 @@ import org.junit.Test;
 
 public class DoublelinkedListTest {
     /**
-     * Tests for class Finder.
-     * <p>
-     * All tests in the folder "test" are executed
-     * when the "Test" action is invoked.
+     * Tests for class DoublelinkedList.
      */
-
 
     @Test
     public final void test() {
