@@ -23,7 +23,7 @@ public class DoublelinkedListTest {
         dlist.set(1,1);
 
         for (int i = 0; i < 3; i++) {
-            assertTrue(dlist.get(i) == arr[i]);
+            assertEquals(arr[i], dlist.get(i));
         }
 
     }
