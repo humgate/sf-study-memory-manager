@@ -10,7 +10,7 @@ public class DoublelinkedListTest {
     @Test
     public final void test() {
         DoublelinkedList<Integer> dlist = new DoublelinkedList<>();
-        Integer[] arr = new Integer[]{46, 47, 48, 49};
+        Integer[] arr = new Integer[]{46, 1, 48, 49};
 
         dlist.addToEnd(46);
         dlist.addToEnd(47);
@@ -20,6 +20,7 @@ public class DoublelinkedListTest {
         dlist.addToBegin(45);
         dlist.removeFromEnd();
         dlist.removeFromBegin();
+        dlist.set(1,1);
 
         for (int i = 0; i < 3; i++) {
             assertTrue(dlist.get(i) == arr[i]);
