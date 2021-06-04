@@ -37,7 +37,7 @@ public class DoublelinkedList<E> {
         first.next.prev = first.next = new Node<>(first, val, first.next);
     }
 
-    //get element by index idx
+    //get element located at idx
     public E get(int idx) {
         Node<E> current = first;
         for (int i = -1; i < idx; i++) {
@@ -46,6 +46,7 @@ public class DoublelinkedList<E> {
         return current.item;
     }
 
+    //set element value to element located at idx
     public void set(int idx, E val) {
         Node<E> current = first;
         for (int i = -1; i < idx; i++) {
@@ -54,13 +55,13 @@ public class DoublelinkedList<E> {
         current.item = val;
     }
 
-    //удаление с конца
-    public void popBack() {
+    //remove from end, mark previous to removed as last
+    public void removeFromEnd() {
         last.prev = last.prev.prev;
         last.prev.next = last;
     }
 
-    //удаление с начала
+    //remove from  begin, mark next to removed as first
     public void popFront() {
         first.next = first.next.next;
         first.next.prev = first;
