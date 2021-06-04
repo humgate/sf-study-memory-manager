@@ -32,7 +32,7 @@ public class DoublelinkedList<E> {
     }
 
     //add to begin, mark it first
-    public void pushFront(E val) {
+    public void addToBegin(E val) {
         first.next.prev = first.next = new Node<>(first, val, first.next);
     }
 
