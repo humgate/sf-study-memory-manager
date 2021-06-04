@@ -13,7 +13,6 @@ public class DoublelinkedList<E> {
             this.next = next;
         }
     }
-
     private Node<E> first;
     private Node<E> last;
 
@@ -62,7 +61,7 @@ public class DoublelinkedList<E> {
     }
 
     //remove from  begin, mark next to removed as first
-    public void popFront() {
+    public void removeFromBegin() {
         first.next = first.next.next;
         first.next.prev = first;
     }
