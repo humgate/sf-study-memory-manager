@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class DoublelinkedList<E> {
     /**
      * Doublelinked list implementation
@@ -40,6 +42,7 @@ public class DoublelinkedList<E> {
         first = new Node<>(null, null, null);
         last = new Node<>(first, null, null);
         first.next = last;
+
     }
 
     //adds new element to the end, marks it as last
@@ -61,11 +64,6 @@ public class DoublelinkedList<E> {
         return current.item;
     }
 
-    //gets element value from element located by link
-    public E getFrom(Node<E> link, E val) {
-        return link.item;
-    }
-
     //sets element value for element located at idx
     public void set(int idx, E val) {
         Node<E> current = first;
@@ -73,11 +71,6 @@ public class DoublelinkedList<E> {
             current = current.next;
         }
         current.item = val;
-    }
-
-    //sets element value for element located by link
-    public void setTo(Node<E> link, E val) {
-        link.item = val;
     }
 
     //removes last element from the end, marks previous to removed one (new last) as last
