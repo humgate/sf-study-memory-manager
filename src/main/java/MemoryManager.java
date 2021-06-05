@@ -1,6 +1,8 @@
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+
 @Getter@Setter
 public class MemoryManager {
 
@@ -10,13 +12,14 @@ public class MemoryManager {
      * index - number of memory space item
      * length - length of memory space item
      * status - indicates whether space item is allocated or free
-     *
+     * node - the link to
      */
 
     private class MemorySpaceItem {
         int index;
         int length;
         boolean allocated;
+
 
         public MemorySpaceItem(int index, int length, boolean allocated) {
             this.index = index;
@@ -26,18 +29,17 @@ public class MemoryManager {
     }
 
     /*
+     * Stores the size of managed memory space
+     *
+     */
+    private final int size;
+
+    /*
      * Double linked list. Contains collection of memory space items. Main structure containing info about which memory
      * spaces are allocated and which are free
      *
      */
     DoublelinkedList<MemorySpaceItem> dlist = new DoublelinkedList<>();
-
-
-    /*
-     * Stores the size of managed memory space
-     *
-     */
-    private final int size;
 
 
     MemoryManager(int size){

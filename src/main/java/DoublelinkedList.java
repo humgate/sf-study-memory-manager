@@ -1,29 +1,40 @@
 public class DoublelinkedList<E> {
     /**
      * Doublelinked list implementation
-     * @param <E>  - element type
      */
 
     static class Node<E> {
+        /*
+         * Base class to encapsulate element to be stored in double linked list
+         *
+         */
+
         E item; // the data
         Node<E> next; //link to next
         Node<E> prev; //link to previous
 
-        public Node(Node<E> prev, E item, Node<E> next) {
+        Node(Node<E> prev, E item, Node<E> next) {
             this.prev = prev;
             this.item = item;
             this.next = next;
         }
     }
-    private Node<E> first;
-    private Node<E> last;
+
+    /*
+     * Elements pointing to first and last list elements
+     *
+     */
+    private final Node<E> first;
+    private final Node<E> last;
 
     public DoublelinkedList() {
 
-        /* Both @first & @last are just links to first and last DoublelinkedList elements. They are not the elements
-         *themselves. So they really need to be just links to Node <E>. But initialization of @first and @last
-         *as Node <E> allows more simple, better readable and compact code in methods implementations
-         * So init them as two Nodes first->last
+        /*
+         * Both @first & @last are just links to first and last list elements. They are not the elements
+         * themselves storing "business" data. They really need to be just links to Node<E>. But initialization
+         * of @first and @last as Node<E> allows more simple, better readable and compact code in methods
+         * implementations. So init them as two Node<E> elements connected to each other first->last
+         *
          */
 
         first = new Node<>(null, null, null);
@@ -50,6 +61,11 @@ public class DoublelinkedList<E> {
         return current.item;
     }
 
+    //gets element value from element located by link
+    public E getFrom(Node<E> link, E val) {
+        return link.item;
+    }
+
     //sets element value for element located at idx
     public void set(int idx, E val) {
         Node<E> current = first;
@@ -57,6 +73,11 @@ public class DoublelinkedList<E> {
             current = current.next;
         }
         current.item = val;
+    }
+
+    //sets element value for element located by link
+    public void setTo(Node<E> link, E val) {
+        link.item = val;
     }
 
     //removes last element from the end, marks previous to removed one (new last) as last
@@ -85,5 +106,6 @@ public class DoublelinkedList<E> {
     public boolean isEmpty() {
         return (first.next == last && last.prev == first);
     }
+
 }
 
