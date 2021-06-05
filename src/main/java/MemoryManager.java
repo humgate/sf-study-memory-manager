@@ -1,11 +1,11 @@
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.Stack;
 
 @Getter@Setter
 public class MemoryManager {
+
     /*
      * Memory Space Item is structure used to store info about a memory piece.
      * index -  number of memory space item
@@ -39,7 +39,6 @@ public class MemoryManager {
      */
     DoublelinkedList<MemorySpaceItem> dlist = new DoublelinkedList<>();
 
-
     /*
      * HasMap stores pairs of: memory item index - memory item length. Used to check if the given index has
      * allocated memory item starting at that index.
@@ -50,18 +49,27 @@ public class MemoryManager {
      */
     HashMap<Integer, Integer> allocMemMap = new HashMap<>();
 
+    /*
+    * Stack holds free memory space items lest recently freed. So as soon as memory manager frees a memory space item
+    * this item is pushed to stack. When memory manager allocates a memory space item, it looks for LRU items at the
+    * top of the stack.
+    *
+    */
+    Stack<MemorySpaceItem> stack = new Stack<>();
 
     MemoryManager(int size){
         this.size = size;
 
         //initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
         dlist.addToBegin(new MemorySpaceItem(0,size,false));
+
     }
 
     public int malloc (int n) {
         /*
          * 1. Find Least Recently Used (least recently freed) memory space item in stack (stack.item)
-         * 2. Check if n is less or equal to stack.item.length returned at step above. If greater - error
+         * 2. Check if n is less or equal to stack.item.length returned at step above. According to task description:
+         * if n > LRU stack.item - return -1, else proceed below.
          * 3. Find free dlist.item (MemorySpaceItem object) corresponding to this (1) stack.item. Delete this
          * stack.item from stack.
          * 4. Mark this (3) free dlist.item as allocated, change its n (to @param). Put new pair into allocated memory
@@ -71,9 +79,9 @@ public class MemoryManager {
          * 8. Add new stack.item corresponding to new free (6) dlist.item
          * 9. return allocated dlist.item.index (from 4)
          *
-         *
-         *
          */
+
+
         return n;
     }
 
