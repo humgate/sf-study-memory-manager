@@ -60,9 +60,16 @@ public class MemoryManager {
     MemoryManager(int size){
         this.size = size;
 
-        //initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
-        dlist.addToBegin(new MemorySpaceItem(0,size,false));
+        MemorySpaceItem memItem = new MemorySpaceItem(0,size,false);
+        //Initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
+        dlist.addToBegin(memItem);
 
+        /*
+         * Initialize stack with this item. According to the task description, this implementation of memory manager
+         * can allocate memory only if there is an LFU memory item. We have to create at least one LFU stack item at
+         * the very begin, otherwise, malloc(n) will be unable to allocate memory at all
+         */
+        stack.push(memItem);
     }
 
     public int malloc (int n) {
