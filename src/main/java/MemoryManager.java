@@ -90,11 +90,26 @@ public class MemoryManager {
          */
 
         // 1,2
-        if (stack.pop().length < n) {
+        MemorySpaceItem item = stack.pop();
+        if ( item.length < n) {
             return -1;
         }
 
         //3
+        int index  = dlist.getFirstIndex(item);
+        if (index == -1) {
+            return -1;
+        }
+        stack.pop();
+
+        //4
+        item.length = n;
+        item.allocated = true;
+        item.index = index;
+        dlist.set(index, item);
+
+        allocMemMap.put(index, n);
+
 
 
         return n;
