@@ -95,6 +95,24 @@ public class DoublelinkedList<E> {
         return first.next.item;
     }
 
+    //gets previous item to the item with given idx
+    public E getPrev(int idx) {
+        Node<E> current = first;
+        for (int i = -1; i < idx; i++) {
+            current = current.next;
+        }
+        return current.prev.item;
+    }
+
+    //gets next item to the item with given idx
+    public E getNext(int idx) {
+        Node<E> current = first;
+        for (int i = -1; i < idx; i++) {
+            current = current.next;
+        }
+        return current.next.item;
+    }
+
     //if @first and @last link to each other, then no real elements between them in the list
     public boolean isEmpty() {
         return (first.next == last && last.prev == first);

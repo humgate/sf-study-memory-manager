@@ -87,8 +87,17 @@ public class MemoryManager {
         /*
          * 1. Find allocated space.item with index = i in allocMemMap.
          * If none return -1 , else proceed below
+         * 2. As soon as it exists, find it in the dlist. Set its status to free
+         * 3. Find appropriate stack.item and delete it
+         * 3. Check if there are adjacent free memory space items to this one in dlist using dlist getPrev/getNext.
+         * If yes:
+         * merge them by setting leftmost (closest to dlist begin) item length equal to sum of all
+         * found free adjacent item lengths. Delete all found adjacent neighbour dlist.items to the right
+         * (closer to the end of dlist). Along with deleting these dlist.items, find corresponding ones in the stack
+         *  and delete them as well
          *
          */
+
 
         return (i);
     }
