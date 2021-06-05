@@ -22,9 +22,12 @@ public class DoublelinkedListTest {
         dlist.removeFromBegin();
         dlist.set(1,1);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             assertEquals(arr[i], dlist.get(i));
         }
+        assertEquals(dlist.getFirstIndex(46),0);
+        assertEquals(dlist.getFirstIndex(1),1);
+        assertEquals(dlist.getFirstIndex(49),3);
 
     }
 }

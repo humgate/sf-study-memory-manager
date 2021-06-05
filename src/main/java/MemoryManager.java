@@ -61,6 +61,7 @@ public class MemoryManager {
         this.size = size;
 
         MemorySpaceItem memItem = new MemorySpaceItem(0,size,false);
+
         //Initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
         dlist.addToBegin(memItem);
 
@@ -87,6 +88,13 @@ public class MemoryManager {
          * 9. return allocated dlist.item.index (from 4)
          *
          */
+
+        // 1,2
+        if (stack.pop().length < n) {
+            return -1;
+        }
+
+        //3
 
 
         return n;

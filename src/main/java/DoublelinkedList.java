@@ -113,6 +113,22 @@ public class DoublelinkedList<E> {
         return current.next.item;
     }
 
+    //gets index of the first list item containing @val in data
+    public int getFirstIndex(E val) {
+        //return -1 if none
+        int i = -1;
+        Node<E> current = first;
+        while (current.next != null) {
+            i++;
+            current = current.next;
+            if (current.item.equals(val)) {
+                return i;
+            }
+        }
+        return i;
+    }
+
+
     //if @first and @last link to each other, then no real elements between them in the list
     public boolean isEmpty() {
         return (first.next == last && last.prev == first);
