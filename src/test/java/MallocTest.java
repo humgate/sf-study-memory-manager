@@ -8,9 +8,13 @@ public class MallocTest {
      */
     @Test
     public final void test2() {
+
         MemoryManager manager = new MemoryManager(100);
+
         manager.malloc(5);
         manager.malloc(2);
+
+        assertEquals(manager.malloc(94),-1);
 
         assertEquals(manager.dlist.getByIndex(0).index,0);
         assertEquals(manager.dlist.getByIndex(0).length,5);

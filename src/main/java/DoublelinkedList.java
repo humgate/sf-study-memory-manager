@@ -7,7 +7,7 @@ public class DoublelinkedList<E> {
      * */
 
     /*
-     * Elements pointing to first and last list elements
+     * Technical staff. Elements pointing to first and last list elements
      *
      */
     private final Node<E> first;

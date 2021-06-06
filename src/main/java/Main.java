@@ -16,7 +16,4 @@ public class Main {
                 manager.dlist.getByIndex(2).index + " " + manager.dlist.getByIndex(2).length +  " " +
                         manager.dlist.getByIndex(2).allocated);
     }
-
-
-
 }

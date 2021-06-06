@@ -8,13 +8,10 @@ public class MemoryManager {
 
     /*
      * Memory Space Item is structure used to store info about a memory piece.
-     * index -  number of memory space item
-     * length - length of memory space item
-     * status - indicates whether space item is allocated or free
      *
      */
 
-    public class MemorySpaceItem {
+    static class MemorySpaceItem {
         //index - number of memory space item
         int index;
 
@@ -73,7 +70,7 @@ public class MemoryManager {
     MemoryManager(int size){
         this.size = size;
 
-        MemorySpaceItem memItem = new MemorySpaceItem(0,size,false);
+        MemorySpaceItem memItem = new MemorySpaceItem(0, size, false);
 
         //Initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
         dlist.addToBegin(memItem);
