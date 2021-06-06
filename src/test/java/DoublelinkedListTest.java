@@ -22,7 +22,7 @@ public class DoublelinkedListTest {
         dlist.setByIndex(1,1);
 
         for (int i = 0; i < 4; i++) {
-            assertEquals(arr[i], dlist.get(i));
+            assertEquals(arr[i], dlist.getByIndex(i));
         }
         assertEquals(dlist.getFirstIndexByVal(46),0);
         assertEquals(dlist.getFirstIndexByVal(1),1);

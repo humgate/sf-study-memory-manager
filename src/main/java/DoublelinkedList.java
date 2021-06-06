@@ -40,7 +40,7 @@ public class DoublelinkedList<E> {
     }
 
     //gets element located at idx
-    public E get(int idx) {
+    public E getByIndex(int idx) {
         Node<E> current = first;
         for (int i = -1; i < idx; i++) {
             current = current.next;
@@ -96,26 +96,8 @@ public class DoublelinkedList<E> {
     }
 
     //gets first. @first is just the link to real last, so returns next to @first
-    public E front() {
+    public E getFirst() {
         return first.next.item;
-    }
-
-    //gets previous item to the item with given idx
-    public E getPrev(int idx) {
-        Node<E> current = first;
-        for (int i = -1; i < idx; i++) {
-            current = current.next;
-        }
-        return current.prev.item;
-    }
-
-    //gets next item to the item with given idx
-    public E getNext(int idx) {
-        Node<E> current = first;
-        for (int i = -1; i < idx; i++) {
-            current = current.next;
-        }
-        return current.next.item;
     }
 
     //gets index of the first element containing @val in data
@@ -145,10 +127,6 @@ public class DoublelinkedList<E> {
             }
         }
         return current;
-    }
-
-    public Node<E> getFirst() {
-        return first;
     }
 
     //if @first and @last link to each other, then no real elements between them in the list
