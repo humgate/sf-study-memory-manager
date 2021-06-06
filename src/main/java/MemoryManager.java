@@ -1,7 +1,6 @@
 import lombok.Getter;
 import lombok.Setter;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.Stack;
 
 @Getter@Setter
@@ -27,13 +26,6 @@ public class MemoryManager {
             this.index = index;
             this.length = length;
             this.allocated = allocated;
-        }
-
-        //copy item from @param item
-        public void copyOf(MemorySpaceItem item){
-            this.index = item.index;
-            this.length = item.length;
-            this.allocated = item.allocated;
         }
     }
 
