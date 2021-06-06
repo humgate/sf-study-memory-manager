@@ -14,7 +14,7 @@ public class MemoryManager {
      *
      */
 
-    private class MemorySpaceItem {
+    public class MemorySpaceItem {
         //index - number of memory space item
         int index;
 
@@ -109,11 +109,10 @@ public class MemoryManager {
         }
 
         //3
-        Node<MemorySpaceItem> node  = dlist.getFirstNodeByVal(item);
+        Node<MemorySpaceItem> node = dlist.getFirstNodeByVal(item);
         if (node == null) {
             return -1;
         }
-        stack.pop();
 
         //4
         MemorySpaceItem newItem = new MemorySpaceItem(item.index, item.length, item.allocated);
