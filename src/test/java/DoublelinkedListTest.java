@@ -20,14 +20,14 @@ public class DoublelinkedListTest {
         dlist.addToBegin(45);
         dlist.removeFromEnd();
         dlist.removeFromBegin();
-        dlist.set(1,1);
+        dlist.setByIndex(1,1);
 
         for (int i = 0; i < 4; i++) {
             assertEquals(arr[i], dlist.get(i));
         }
-        assertEquals(dlist.getFirstIndex(46),0);
-        assertEquals(dlist.getFirstIndex(1),1);
-        assertEquals(dlist.getFirstIndex(49),3);
+        assertEquals(dlist.getFirstIndexByVal(46),0);
+        assertEquals(dlist.getFirstIndexByVal(1),1);
+        assertEquals(dlist.getFirstIndexByVal(49),3);
 
     }
 }

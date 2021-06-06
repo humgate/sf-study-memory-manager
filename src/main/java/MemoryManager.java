@@ -15,14 +15,27 @@ public class MemoryManager {
      */
 
     private class MemorySpaceItem {
+        //index - number of memory space item
         int index;
+
+        //length - length of memory space item
         int length;
+
+        //status - indicates whether space item is allocated or free
         boolean allocated;
+
 
         public MemorySpaceItem(int index, int length, boolean allocated) {
             this.index = index;
             this.length = length;
             this.allocated = allocated;
+        }
+
+        //copy item from @param item
+        public void copyOf(MemorySpaceItem item){
+            this.index = item.index;
+            this.length = item.length;
+            this.allocated = item.allocated;
         }
     }
 
@@ -82,35 +95,45 @@ public class MemoryManager {
          * stack.item from stack.
          * 4. Mark this (3) free dlist.item as allocated, change its n (to @param). Put new pair into allocated memory
          * hash map (allocMemMap), with key = i and value = n.
-         * 5. Calculate new free space item, left from previous item (3) after allocation new item into it.
+         * 5. Calculate new free space item size, left from previous item (3) after allocation new item into it.
          * 6. Add new free (reduced) dlist.item next to this (4) just allocated item.
-         * 8. Add new stack.item corresponding to new free (6) dlist.item
-         * 9. return allocated dlist.item.index (from 4)
+         * 7. Add new stack.item corresponding to new free (6) dlist.item
+         * 8. return allocated dlist.item.index (from 4)
          *
          */
 
         // 1,2
         MemorySpaceItem item = stack.pop();
-        if ( item.length < n) {
+        if (item.length < n) {
             return -1;
         }
 
         //3
-        int index  = dlist.getFirstIndex(item);
-        if (index == -1) {
+        Node<MemorySpaceItem> node  = dlist.getFirstNodeByVal(item);
+        if (node == null) {
             return -1;
         }
         stack.pop();
 
         //4
+        MemorySpaceItem newItem = new MemorySpaceItem(item.index, item.length, item.allocated);
+
         item.length = n;
+        item.index = node.item.index;
         item.allocated = true;
-        item.index = index;
-        dlist.set(index, item);
 
-        allocMemMap.put(index, n);
+        dlist.setByLink(node, item);
+        allocMemMap.put(item.index, n);
 
+        //5
+        newItem.index = newItem.index + n;
+        newItem.length = newItem.length - n;
 
+        //6
+        dlist.insertAfter(node, newItem);
+
+        //7
+        stack.push(newItem);
 
         return n;
     }

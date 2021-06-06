@@ -1,26 +1,10 @@
-import java.util.ArrayList;
-
 public class DoublelinkedList<E> {
     /**
-     * Doublelinked list implementation
-     */
-
-    static class Node<E> {
-        /*
-         * Base class to encapsulate element to be stored in double linked list
-         *
-         */
-
-        E item; // the data
-        Node<E> next; //link to next
-        Node<E> prev; //link to previous
-
-        Node(Node<E> prev, E item, Node<E> next) {
-            this.prev = prev;
-            this.item = item;
-            this.next = next;
-        }
-    }
+     * Doublelinked list implementation specifically designed to hold Node<E> elements.
+     * Node <E> class declared public to allow access to Doublelinked list elements (Nodes) from outside of this class.
+     * Allowing this significantly simplifies operations of setting list elements values, getting elements, inserting
+     * and deleting elements located next to given Node within the list
+     * */
 
     /*
      * Elements pointing to first and last list elements
@@ -65,12 +49,33 @@ public class DoublelinkedList<E> {
     }
 
     //sets element value for element located at idx
-    public void set(int idx, E val) {
+    public void setByIndex(int idx, E val) {
         Node<E> current = first;
         for (int i = -1; i < idx; i++) {
             current = current.next;
         }
         current.item = val;
+    }
+
+    //sets element value for element located by link
+    public void setByLink(Node<E> node, E val) {
+        node.item = val;
+    }
+
+    //inserts element after element located by link in param
+    public Node<E> insertAfter(Node<E> node, E val) {
+        Node<E> newNode = new Node<>(node, val, node.next);
+        node.next.prev = newNode;
+        node.next = newNode;
+        return newNode;
+    }
+
+    //inserts element before element located by link in param
+    public Node<E> insertBefore(Node<E> node, E val) {
+        Node<E> newNode = new Node<>(node.prev, val, node);
+        node.prev.next = newNode;
+        node.prev = newNode;
+        return newNode;
     }
 
     //removes last element from the end, marks previous to removed one (new last) as last
@@ -113,8 +118,8 @@ public class DoublelinkedList<E> {
         return current.next.item;
     }
 
-    //gets index of the first list item containing @val in data
-    public int getFirstIndex(E val) {
+    //gets index of the first element containing @val in data
+    public int getFirstIndexByVal(E val) {
         //return -1 if none
         int i = -1;
         Node<E> current = first;
@@ -128,6 +133,23 @@ public class DoublelinkedList<E> {
         return i;
     }
 
+    //gets link to the first element (Node) containing @val in data
+    public Node<E> getFirstNodeByVal(E val) {
+        //return null if none
+        Node <E> node = null;
+        Node<E> current = first;
+        while (current.next != null) {
+            current = current.next;
+            if (current.item.equals(val)) {
+                return current;
+            }
+        }
+        return current;
+    }
+
+    public Node<E> getFirst() {
+        return first;
+    }
 
     //if @first and @last link to each other, then no real elements between them in the list
     public boolean isEmpty() {
