@@ -1,6 +1,7 @@
 import lombok.Getter;
 import lombok.Setter;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Stack;
 
 @Getter@Setter
@@ -57,7 +58,7 @@ public class MemoryManager {
      * index along with its length in the HashMap)
      *
      */
-    HashMap<Integer, Integer> allocMemMap = new HashMap<>();
+    HashMap<Integer, Node<MemorySpaceItem>> allocMemMap = new HashMap<>();
 
     /*
     * Stack holds free memory space items lest recently freed. So as soon as memory manager frees a memory space item
@@ -119,7 +120,7 @@ public class MemoryManager {
         item.allocated = true;
 
         dlist.setByLink(node, item);
-        allocMemMap.put(item.index, n);
+        allocMemMap.put(item.index, node);
 
         //5
         newItem.index = newItem.index + n;
@@ -138,7 +139,7 @@ public class MemoryManager {
         /*
          * 1. Find allocated space.item with index = i in allocMemMap.
          * If none return -1, else proceed below
-         * 2. As soon as it exists, find it in the dlist. Set its status to free in the dlist
+         * 2. As soon as it exists, find it in the dlist. Set its status to free in the dlist. Remove from allocMemMap
          * 3. Check if there are adjacent free memory space items to this one in dlist using dlist getPrev/getNext.
          * If yes:
          * merge them by setting leftmost (closest to dlist begin) item length equal to sum of all
@@ -149,7 +150,23 @@ public class MemoryManager {
          *
          */
 
+        //1
+        if (allocMemMap.get(i) == null) {
+            return -1;
+        }
 
-        return (i);
+        //2
+        Node<MemorySpaceItem> node = allocMemMap.get(i);
+        allocMemMap.remove(i, node);
+
+        node.item.allocated = false;
+        if (!node.next.item.allocated) {
+            node.item.length = node.item.length + node.next.item.length;
+            dlist.remove(node.next);
+            stack.remove(node.next.item);
+        }
+
+
+        return 0;
     }
 }

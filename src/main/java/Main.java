@@ -5,6 +5,7 @@ public class Main {
         manager.malloc(5);
         manager.malloc(2);
 
+        System.out.println(manager.free(0));
 
         System.out.println(
                 manager.dlist.getByIndex(0).index + " " + manager.dlist.getByIndex(0).length + " " +
@@ -15,5 +16,8 @@ public class Main {
         System.out.println(
                 manager.dlist.getByIndex(2).index + " " + manager.dlist.getByIndex(2).length +  " " +
                         manager.dlist.getByIndex(2).allocated);
+
+
     }
+
 }

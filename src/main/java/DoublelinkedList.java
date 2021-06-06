@@ -48,6 +48,15 @@ public class DoublelinkedList<E> {
         return current.item;
     }
 
+    //gets link element Node located at idx
+    public Node <E> getNodeByIndex(int idx) {
+        Node<E> current = first;
+        for (int i = -1; i < idx; i++) {
+            current = current.next;
+        }
+        return current;
+    }
+
     //sets element value for element located at idx
     public void setByIndex(int idx, E val) {
         Node<E> current = first;
@@ -89,6 +98,13 @@ public class DoublelinkedList<E> {
         first.next = first.next.next;
         first.next.prev = first;
     }
+
+    //removes the element by link
+    public void remove (Node <E> node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
 
     //gets last. @last is just the link to real last, so returns previous to @last
     public E getLast() {
