@@ -43,11 +43,11 @@ public class MemoryManager {
     DoublelinkedList<MemorySpaceItem> dlist = new DoublelinkedList<>();
 
     /*
-     * HasMap stores pairs of: memory item index - memory item length. Used to check if the given index has
+     * HasMap stores pairs of: memory item index - Node object. Used to check if the given index has
      * allocated memory item starting at that index.
      * (It is possible to seek for that index right in the double linked dlist. But in this case it will iterate
      * through all dlist elements each time (worst case). To speed up this search we store each allocated mem space
-     * index along with its length in the HashMap)
+     * index along with link to its Node in dlist in the HashMap)
      *
      */
     HashMap<Integer, Node<MemorySpaceItem>> allocMemMap = new HashMap<>();
