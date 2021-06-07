@@ -5,45 +5,6 @@ import java.util.Stack;
 
 @Getter@Setter
 public class MemoryManager {
-
-    /*
-     * Memory Space Item is structure used to store info about a memory piece.
-     *
-     */
-
-    static class MemoryItem extends Node {
-        //index - number of memory space item
-        int index;
-
-        //length - length of memory space item
-        int length;
-
-        //status - indicates whether space item is allocated or free
-        boolean allocated;
-
-        public MemoryItem(int index, int length, boolean allocated, Node prev, Node next) {
-            super(prev, next);
-            this.index = index;
-            this.length = length;
-            this.allocated = allocated;
-        }
-
-        public MemoryItem(int index, int length, boolean allocated) {
-            super(null, null);
-            this.index = index;
-            this.length = length;
-            this.allocated = allocated;
-        }
-
-        public MemoryItem getNext() {
-            return (MemoryItem) this.next;
-        }
-
-        public MemoryItem getPrev(MemoryItem item) {
-            return (MemoryItem) this.prev;
-        }
-    }
-
     /*
      * Stores the size of managed memory
      *
@@ -65,7 +26,7 @@ public class MemoryManager {
      * index along with link to its Node in dlist in the HashMap)
      *
      */
-    HashMap<Integer, MemoryItem> allocMemMap = new HashMap<>();
+    HashMap<Integer, MemItem> allocMemMap = new HashMap<>();
 
     /*
     * Stack holds free memory space items lest recently freed. So as soon as memory manager frees a memory space item
@@ -73,13 +34,13 @@ public class MemoryManager {
     * top of the stack.
     *
     */
-    Stack<MemoryItem> stack = new Stack<>();
+    Stack<MemItem> stack = new Stack<>();
 
     MemoryManager(int size){
         this.size = size;
 
         //Initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
-        MemoryItem initialItem = new MemoryItem(0, size, false);
+        MemItem initialItem = new MemItem(0, size, false);
         dlist.addToBegin(initialItem);
 
         /*
@@ -107,21 +68,17 @@ public class MemoryManager {
          */
 
         // 1,2,3
-        MemoryItem item = stack.pop();
+        MemItem item = stack.pop();
         if (item == null || item.length < n) {
             return -1;
         }
 
-        //4
-        MemoryItem newItem = new MemoryItem(item.index + n, item.length - n, false);
+        //4,5
+        MemItem newItem = new MemItem(item.index + n, item.length - n, false);
 
         item.length = n;
         item.allocated = true;
         allocMemMap.put(item.index, item);
-
-        //5
-        newItem.index = newItem.index + n;
-        newItem.length = newItem.length - n;
 
         //6
         dlist.insertAfter(item, newItem);
@@ -153,12 +110,12 @@ public class MemoryManager {
         }
 
         //2
-        MemoryItem item = allocMemMap.get(i);
+        MemItem item = allocMemMap.get(i);
         allocMemMap.remove(i, item);
 
         item.allocated = false;
 
-        MemoryItem neighbourItem = item.getNext();
+        MemItem neighbourItem = item.next;
         if (!neighbourItem.allocated) {
             item.length = item.length + neighbourItem.length;
             stack.remove(neighbourItem);

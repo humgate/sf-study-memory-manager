@@ -1,99 +1,94 @@
 public class DoublelinkedList {
     /**
-     * Doublelinked list implementation specifically designed to hold Node<E> elements.
-     * Node <E> class declared public to allow access to Doublelinked list elements (Nodes) from outside of this class.
+     * Doublelinked list implementation specifically designed to hold MemItem<E> elements.
+     * MemItem <E> class declared public to allow access to Doublelinked list elements (MemItems) from outside of this class.
      * Allowing this significantly simplifies operations of setting list elements values, getting elements, inserting
-     * and deleting elements located next to given Node within the list
+     * and deleting elements located next to given MemItem within the list
      * */
 
     /*
      * Technical staff. Elements pointing to first and last list elements
      *
      */
-    private final Node first;
-    private final Node last;
+    private final MemItem first;
+    private final MemItem last;
 
     public DoublelinkedList() {
 
         /*
          * Both @first & @last are just links to first and last list elements. They are not the elements
-         * themselves storing "business" data. They really need to be just links to Node<E>. But initialization
-         * of @first and @last as Node<E> allows more simple, better readable and compact code in methods
-         * implementations. So init them as two Node<E> elements connected to each other first->last
+         * themselves storing "business" data. They really need to be just links to MemItem<E>. But initialization
+         * of @first and @last as MemItem<E> allows more simple, better readable and compact code in methods
+         * implementations. So init them as two MemItem<E> elements connected to each other first->last
          *
          */
 
-        first = new Node(null, null);
-        last = new Node(first, null);
+        first = new MemItem(-1,0,false,null, null);
+        last = new MemItem(-1,0,false,first, null);
         first.next = last;
 
     }
 
     //adds new element to the end, marks it as last
-    public Node addToEnd(Node node) {
+    public MemItem addToEnd(MemItem node) {
         node.prev = last.prev;
         node.next = last;
         return last.prev.next = last.prev = node;
     }
 
     //adds new element to begin, marks it as first
-    public Node addToBegin(Node node) {
+    public MemItem addToBegin(MemItem node) {
         node.prev = first;
         node.next = first.next;
         return first.next.prev = first.next = node;
     }
 
-    //gets link to Node located at idx
-    public Node getNodeByIndex(int idx) {
-        Node current = first;
-        for (int i = -1; i < idx; i++) {
+    //gets link to MemItem located at idx except first and last nodes
+    public MemItem getMemItemByIndex(int idx) {
+        MemItem current = first;
+        int i = -1;
+        while (current != last && i < idx) {
             current = current.next;
+            i++;
         }
-        return current;
+
+        return (current == last || current==first) ? null:current;
     }
 
-    //sets element value for element located at idx
-    public Node setByIndex(int idx) {
-        Node current = first;
-        for (int i = -1; i < idx; i++) {
-            current = current.next;
-        }
-        return current;
-    }
 
     //inserts element after element located by link in param
-    public Node insertAfter(Node afterNode, Node newNode) {
-        newNode.prev = afterNode;
-        newNode.next = afterNode.next;
+    public MemItem insertAfter(MemItem afterMemItem, MemItem newMemItem) {
+        newMemItem.prev = afterMemItem;
+        newMemItem.next = afterMemItem.next;
 
-        afterNode.next.prev = newNode;
-        afterNode.next = newNode;
-        return newNode;
+        afterMemItem.next.prev = newMemItem;
+        afterMemItem.next = newMemItem;
+        return newMemItem;
     }
 
     //inserts element before element located by link in param
-    public Node insertBefore(Node beforeNode, Node newNode) {
-        newNode.prev = beforeNode.prev;
-        newNode.next = beforeNode;
+    public MemItem insertBefore(MemItem beforeMemItem, MemItem newMemItem) {
+        newMemItem.prev = beforeMemItem.prev;
+        newMemItem.next = beforeMemItem;
 
-        newNode.prev.next = newNode;
-        newNode.prev = newNode;
-        return newNode;
+        newMemItem.prev.next = newMemItem;
+        newMemItem.prev = newMemItem;
+        return newMemItem;
     }
 
     //removes the element by link
-    public void remove (Node node) {
+    public void remove (MemItem node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
 
     //gets last. @last is just the link to real last, so returns previous to @last
-    public Node getLast() {
+    public MemItem getLast() {
         return last.prev;
     }
 
     //gets first. @first is just the link to real last, so returns next to @first
-    public Node getFirst() {
+    public MemItem getFirst() {
         return first.next;
     }
 
