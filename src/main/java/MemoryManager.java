@@ -25,44 +25,43 @@ public class MemoryManager {
     DoublelinkedList dlist = new DoublelinkedList();
 
     /*
-     * HasMap stores pairs of: memory item index - Node object. Used to check if the given index has
+     * HasMap stores pairs of: memory item index - MemItem object. Used to check if given index has
      * allocated memory item starting at that index.
      * (It is possible to seek for that index right in the double linked dlist. But in this case it will iterate
-     * through all dlist elements each time (worst case). To speed up this search we store each allocated mem space
-     * index along with link to its Node in dlist in the HashMap)
+     * through all dlist elements each time (worst case). To speed up this search we store each allocated memItem
+     * index along with link to its MemItem in the HashMap)
      */
     HashMap<Integer, MemItem> allocMemMap = new HashMap<>();
 
     /*
      * Stack holds free memory space items lest recently freed. So as soon as memory manager frees a memory space item
-     * this item is pushed to stack. When memory manager allocates a memory space item, it looks for LRU items at the
-     * top of the stack.
-     *
+     * we push this item to stack. When memory manager allocates a memory space item, it looks for LRU items by popping
+     * them from stack.
      */
     Stack<MemItem> stack = new Stack<>();
 
     MemoryManager(int size){
         this.size = size;
 
-        //Initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
+        //Initialize manager by adding one free MemItem with starting index = 0 and size equals to @size
         MemItem initialItem = new MemItem(0, size, false);
         dlist.addToBegin(initialItem);
 
         /*
          * Initialize stack with this item. According to the task description, this implementation of memory manager
-         * can allocate memory only if there is an LFU memory item. We have to create at least one LFU stack item at
-         * the very begin, otherwise, malloc(n) will be unable to allocate memory at all
+         * can allocate memory only if there is an LFU memory item > than requested n. We have to create at least one
+         * LFU stack item at the very beginning, otherwise, malloc(n) will be unable to allocate memory at all
          */
         stack.push(initialItem);
     }
 
     /**
      * Allocates memory item with size = @param.
-     * @param n - size of memory item to allocate
-     * @return - number at which allocated memory item starts, or -1 in when unable to allocate memory item of
+     * @param n size of memory item to allocate
+     * @return number at which allocated memory item starts, or -1 in when unable to allocate memory item of
      * requested size.
      *
-     * Algorithm:
+     * <p>Algorithm:
      * 1. Find Least Recently Used (least recently freed) memory item in stack (stack item)
      * 2. Check item returned at (1) is not null and n is less or equal to item.length. Return -1 if not
      * 3. Get list item (MemItem object) corresponding to this (1) stack item. Delete it (stack item) from stack
@@ -71,7 +70,7 @@ public class MemoryManager {
      * 5. Calculate new free MemItem size, left from previous item (3) after allocation new item into it.
      * 6. Add new free (reduced) list item next to this (4) just allocated item.
      * 7. Add new stack item corresponding to new free (6) list item
-     * 8. return allocated list item index (from 4)
+     * 8. return allocated list item index (from 4)</p>
      *
      */
     public int malloc (int n) {
@@ -99,9 +98,9 @@ public class MemoryManager {
 
     /**
      * Frees memory item previously allocated by malloc(n)
-     * @param i - memory item index previously allocated by malloc(n)
-     * @return - 0 if success, -1 if i does not correspond to any of previously allocated MemItem index
-     *
+     * @param i memory item index previously allocated by malloc(n)
+     * @return 0 if success, -1 if i does not correspond to any of previously allocated MemItem index
+     *<p>
      * Algorithm:
      * 1. Find allocated space item with index = @param in allocated memory map (allocMemMap).
      * If none return -1, else proceed below.
@@ -114,7 +113,7 @@ public class MemoryManager {
      * - delete all found adjacent neighbour list items to the leftmost item (all ones located to the right or
      * closer to the end of list).
      * - along with deleting these list items, find corresponding ones in the stack and delete them as well
-     * 4. Add new free stack.item corresponding to the item got on previous step
+     * 4. Add new free stack.item corresponding to the item got on previous step</p>
      *
      */
     public int free (int i) {
