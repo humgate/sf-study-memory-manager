@@ -1,14 +1,13 @@
 public class DoublelinkedList {
     /**
-     * Doublelinked list implementation specifically designed to hold MemItem<E> elements.
-     * MemItem <E> class declared public to allow access to Doublelinked list elements (MemItems) from outside of this class.
-     * Allowing this significantly simplifies operations of setting list elements values, getting elements, inserting
-     * and deleting elements located next to given MemItem within the list
+     * Doublelinked list implementation specifically designed to hold MemItem elements.
+     * MemItem class declared public to allow access to Doublelinked list elements (MemItems) from outside of
+     * this class. Allowing this significantly simplifies operations of setting list elements values, getting elements,
+     * inserting and deleting elements located next to given MemItem within the list
      * */
 
     /*
      * Technical staff. Elements pointing to first and last list elements
-     *
      */
     private final MemItem first;
     private final MemItem last;
@@ -17,14 +16,13 @@ public class DoublelinkedList {
 
         /*
          * Both @first & @last are just links to first and last list elements. They are not the elements
-         * themselves storing "business" data. They really need to be just links to MemItem<E>. But initialization
-         * of @first and @last as MemItem<E> allows more simple, better readable and compact code in methods
-         * implementations. So init them as two MemItem<E> elements connected to each other first->last
-         *
+         * themselves storing "business" data. They really need to be just links to MemItem. But initialization
+         * of @first and @last as MemItem allows more simple, better readable and compact code in methods
+         * implementations. So init them as two MemItem elements connected to each other first->last
          */
 
-        first = new MemItem(-1,0,false,null, null);
-        last = new MemItem(-1,0,false,first, null);
+        first = new MemItem(-1, 0, false, null, null);
+        last = new MemItem(-1, 0, false, first, null);
         first.next = last;
 
     }
@@ -51,10 +49,8 @@ public class DoublelinkedList {
             current = current.next;
             i++;
         }
-
-        return (current == last || current==first) ? null:current;
+       return (current == last || current==first) ? null:current;
     }
-
 
     //inserts element after element located by link in param
     public MemItem insertAfter(MemItem afterMemItem, MemItem newMemItem) {
@@ -96,6 +92,5 @@ public class DoublelinkedList {
     public boolean isEmpty() {
         return (first.next == last && last.prev == first);
     }
-
 }
 
