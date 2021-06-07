@@ -129,6 +129,7 @@ public class MemoryManager {
 
         item.allocated = false;
 
+        //4a - check if right neighbour is free and ADD IT if yes
         MemItem neighbourItem = item.next;
         if (!neighbourItem.allocated) {
             item.length = item.length + neighbourItem.length;
@@ -136,6 +137,16 @@ public class MemoryManager {
             dlist.remove(neighbourItem);
         }
 
+        //4b - check if left neighbour is free and JOIN TO IT if yes
+        neighbourItem = item.prev;
+        if (!neighbourItem.allocated) {
+            neighbourItem.length = neighbourItem.length + item.length;
+            stack.remove(neighbourItem);
+            dlist.remove(item);
+            item = neighbourItem;
+        }
+
+        stack.push(item);
         return 0;
     }
 }
