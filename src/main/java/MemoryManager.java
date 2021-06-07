@@ -11,7 +11,7 @@ public class MemoryManager {
      *
      */
 
-    static class MemorySpaceItem {
+    static class MemoryItem extends Node {
         //index - number of memory space item
         int index;
 
@@ -21,11 +21,26 @@ public class MemoryManager {
         //status - indicates whether space item is allocated or free
         boolean allocated;
 
-
-        public MemorySpaceItem(int index, int length, boolean allocated) {
+        public MemoryItem(int index, int length, boolean allocated, Node prev, Node next) {
+            super(prev, next);
             this.index = index;
             this.length = length;
             this.allocated = allocated;
+        }
+
+        public MemoryItem(int index, int length, boolean allocated) {
+            super(null, null);
+            this.index = index;
+            this.length = length;
+            this.allocated = allocated;
+        }
+
+        public MemoryItem getNext() {
+            return (MemoryItem) this.next;
+        }
+
+        public MemoryItem getPrev(MemoryItem item) {
+            return (MemoryItem) this.prev;
         }
     }
 
@@ -40,7 +55,7 @@ public class MemoryManager {
      * spaces are allocated and which are free and how they are located related to each other
      *
      */
-    DoublelinkedList<MemorySpaceItem> dlist = new DoublelinkedList<>();
+    DoublelinkedList dlist = new DoublelinkedList();
 
     /*
      * HasMap stores pairs of: memory item index - Node object. Used to check if the given index has
@@ -50,7 +65,7 @@ public class MemoryManager {
      * index along with link to its Node in dlist in the HashMap)
      *
      */
-    HashMap<Integer, Node<MemorySpaceItem>> allocMemMap = new HashMap<>();
+    HashMap<Integer, MemoryItem> allocMemMap = new HashMap<>();
 
     /*
     * Stack holds free memory space items lest recently freed. So as soon as memory manager frees a memory space item
@@ -58,29 +73,28 @@ public class MemoryManager {
     * top of the stack.
     *
     */
-    Stack<MemorySpaceItem> stack = new Stack<>();
+    Stack<MemoryItem> stack = new Stack<>();
 
     MemoryManager(int size){
         this.size = size;
 
-        MemorySpaceItem memItem = new MemorySpaceItem(0, size, false);
-
         //Initialize manager by adding one free MemorySpaceItem with starting index = 0 and size equals to @size
-        dlist.addToBegin(memItem);
+        MemoryItem initialItem = new MemoryItem(0, size, false);
+        dlist.addToBegin(initialItem);
 
         /*
          * Initialize stack with this item. According to the task description, this implementation of memory manager
          * can allocate memory only if there is an LFU memory item. We have to create at least one LFU stack item at
          * the very begin, otherwise, malloc(n) will be unable to allocate memory at all
          */
-        stack.push(memItem);
+        stack.push(initialItem);
     }
 
     public int malloc (int n) {
         /*
          * 1. Find Least Recently Used (least recently freed) memory space item in stack (stack.item)
-         * 2. Check if n is less or equal to stack.item.length returned at step above. According to task description:
-         * if n > LRU stack.item - return -1, else proceed below.
+         * 2. Check item returned at (1) is not null and n is less or equal to item.length returned at step (1).
+         * According to task description if n > LRU stack.item - return -1, else proceed below.
          * 3. Find free dlist.item (MemorySpaceItem object) corresponding to this (1) stack.item. Delete this
          * stack.item from stack.
          * 4. Mark this (3) free dlist.item as allocated, change its n (to @param). Put new pair into allocated memory
@@ -92,34 +106,25 @@ public class MemoryManager {
          *
          */
 
-        // 1,2
-        MemorySpaceItem item = stack.pop();
-        if (item.length < n) {
-            return -1;
-        }
-
-        //3
-        Node<MemorySpaceItem> node = dlist.getFirstNodeByVal(item);
-        if (node == null) {
+        // 1,2,3
+        MemoryItem item = stack.pop();
+        if (item == null || item.length < n) {
             return -1;
         }
 
         //4
-        MemorySpaceItem newItem = new MemorySpaceItem(item.index, item.length, item.allocated);
+        MemoryItem newItem = new MemoryItem(item.index + n, item.length - n, false);
 
         item.length = n;
-        item.index = node.item.index;
         item.allocated = true;
-
-        dlist.setByLink(node, item);
-        allocMemMap.put(item.index, node);
+        allocMemMap.put(item.index, item);
 
         //5
         newItem.index = newItem.index + n;
         newItem.length = newItem.length - n;
 
         //6
-        dlist.insertAfter(node, newItem);
+        dlist.insertAfter(item, newItem);
 
         //7
         stack.push(newItem);
@@ -131,8 +136,8 @@ public class MemoryManager {
         /*
          * 1. Find allocated space.item with index = i in allocMemMap.
          * If none return -1, else proceed below
-         * 2. As soon as it exists, find it in the dlist. Set its status to free in the dlist. Remove from allocMemMap
-         * 3. Check if there are adjacent free memory space items to this one in dlist using dlist getPrev/getNext.
+         * 2. As soon as it exists, find it in the dlist. Set its status to free. Remove it from allocMemMap
+         * 3. Check if there are adjacent free memory space items to this one in dlist using dlist.
          * If yes:
          * merge them by setting leftmost (closest to dlist begin) item length equal to sum of all
          * found free adjacent item lengths. Delete all found adjacent neighbour dlist.items to the right
@@ -148,16 +153,17 @@ public class MemoryManager {
         }
 
         //2
-        Node<MemorySpaceItem> node = allocMemMap.get(i);
-        allocMemMap.remove(i, node);
+        MemoryItem item = allocMemMap.get(i);
+        allocMemMap.remove(i, item);
 
-        node.item.allocated = false;
-        if (!node.next.item.allocated) {
-            node.item.length = node.item.length + node.next.item.length;
-            dlist.remove(node.next);
-            stack.remove(node.next.item);
+        item.allocated = false;
+
+        MemoryItem neighbourItem = item.getNext();
+        if (!neighbourItem.allocated) {
+            item.length = item.length + neighbourItem.length;
+            stack.remove(neighbourItem);
+            dlist.remove(neighbourItem);
         }
-
 
         return 0;
     }

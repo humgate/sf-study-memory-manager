@@ -1,4 +1,4 @@
-public class DoublelinkedList<E> {
+public class DoublelinkedList {
     /**
      * Doublelinked list implementation specifically designed to hold Node<E> elements.
      * Node <E> class declared public to allow access to Doublelinked list elements (Nodes) from outside of this class.
@@ -10,8 +10,8 @@ public class DoublelinkedList<E> {
      * Technical staff. Elements pointing to first and last list elements
      *
      */
-    private final Node<E> first;
-    private final Node<E> last;
+    private final Node first;
+    private final Node last;
 
     public DoublelinkedList() {
 
@@ -23,34 +23,29 @@ public class DoublelinkedList<E> {
          *
          */
 
-        first = new Node<>(null, null, null);
-        last = new Node<>(first, null, null);
+        first = new Node(null, null);
+        last = new Node(first, null);
         first.next = last;
 
     }
 
     //adds new element to the end, marks it as last
-    public void addToEnd(E val) {
-        last.prev.next = last.prev = new Node<>(last.prev, val, last);
+    public Node addToEnd(Node node) {
+        node.prev = last.prev;
+        node.next = last;
+        return last.prev.next = last.prev = node;
     }
 
     //adds new element to begin, marks it as first
-    public void addToBegin(E val) {
-        first.next.prev = first.next = new Node<>(first, val, first.next);
+    public Node addToBegin(Node node) {
+        node.prev = first;
+        node.next = first.next;
+        return first.next.prev = first.next = node;
     }
 
-    //gets element located at idx
-    public E getByIndex(int idx) {
-        Node<E> current = first;
-        for (int i = -1; i < idx; i++) {
-            current = current.next;
-        }
-        return current.item;
-    }
-
-    //gets link element Node located at idx
-    public Node <E> getNodeByIndex(int idx) {
-        Node<E> current = first;
+    //gets link to Node located at idx
+    public Node getNodeByIndex(int idx) {
+        Node current = first;
         for (int i = -1; i < idx; i++) {
             current = current.next;
         }
@@ -58,91 +53,48 @@ public class DoublelinkedList<E> {
     }
 
     //sets element value for element located at idx
-    public void setByIndex(int idx, E val) {
-        Node<E> current = first;
+    public Node setByIndex(int idx) {
+        Node current = first;
         for (int i = -1; i < idx; i++) {
             current = current.next;
         }
-        current.item = val;
-    }
-
-    //sets element value for element located by link
-    public void setByLink(Node<E> node, E val) {
-        node.item = val;
+        return current;
     }
 
     //inserts element after element located by link in param
-    public Node<E> insertAfter(Node<E> node, E val) {
-        Node<E> newNode = new Node<>(node, val, node.next);
-        node.next.prev = newNode;
-        node.next = newNode;
+    public Node insertAfter(Node afterNode, Node newNode) {
+        newNode.prev = afterNode;
+        newNode.next = afterNode.next;
+
+        afterNode.next.prev = newNode;
+        afterNode.next = newNode;
         return newNode;
     }
 
     //inserts element before element located by link in param
-    public Node<E> insertBefore(Node<E> node, E val) {
-        Node<E> newNode = new Node<>(node.prev, val, node);
-        node.prev.next = newNode;
-        node.prev = newNode;
+    public Node insertBefore(Node beforeNode, Node newNode) {
+        newNode.prev = beforeNode.prev;
+        newNode.next = beforeNode;
+
+        newNode.prev.next = newNode;
+        newNode.prev = newNode;
         return newNode;
     }
 
-    //removes last element from the end, marks previous to removed one (new last) as last
-    public void removeFromEnd() {
-        last.prev = last.prev.prev;
-        last.prev.next = last;
-    }
-
-    //removes first element from begin, marks next to removed one (new first) as first
-    public void removeFromBegin() {
-        first.next = first.next.next;
-        first.next.prev = first;
-    }
-
     //removes the element by link
-    public void remove (Node <E> node) {
+    public void remove (Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
 
-
     //gets last. @last is just the link to real last, so returns previous to @last
-    public E getLast() {
-        return last.prev.item;
+    public Node getLast() {
+        return last.prev;
     }
 
     //gets first. @first is just the link to real last, so returns next to @first
-    public E getFirst() {
-        return first.next.item;
-    }
-
-    //gets index of the first element containing @val in data
-    public int getFirstIndexByVal(E val) {
-        //return -1 if none
-        int i = -1;
-        Node<E> current = first;
-        while (current.next != null) {
-            i++;
-            current = current.next;
-            if (current.item.equals(val)) {
-                return i;
-            }
-        }
-        return i;
-    }
-
-    //gets link to the first element (Node) containing @val in data
-    public Node<E> getFirstNodeByVal(E val) {
-        //return null if none
-        Node <E> node = null;
-        Node<E> current = first;
-        while (current.next != null) {
-            current = current.next;
-            if (current.item.equals(val)) {
-                return current;
-            }
-        }
-        return current;
+    public Node getFirst() {
+        return first.next;
     }
 
     //if @first and @last link to each other, then no real elements between them in the list
